@@ -17,6 +17,7 @@ namespace bunnys_hill
             bunny1.getValues(); //here we are getting info about it
 
             Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }
