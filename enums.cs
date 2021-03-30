@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace bunnys_hill
 {
-    public class Enums
-    {
-        public enum Sex { male, female }//list of types of a bunny's gender
-        public enum Color { white, black, brown, spotted }//list of types of a bunny's color
-    }
+
+    /// <summary>
+    /// list of types of a bunny's gender
+    /// </summary>
+    public enum Sex { male, female }
+
+    /// <summary>
+    /// list of types of a bunny's color
+    /// </summary>
+    public enum Color { white, black, brown, spotted }
+
 }

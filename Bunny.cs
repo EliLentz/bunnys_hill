@@ -6,35 +6,44 @@ using System.Threading.Tasks;
 
 namespace bunnys_hill
 {
+    /// <summary>
+    /// Our bunny in the watership.
+    /// </summary>
     public class Bunny
     {
-        private Enums.Sex m_pSex = new Enums.Sex();
-        private Enums.Color m_pColor = new Enums.Color();
-        private int m_pAge; // 0 - 10
-        private string m_pName; //name of Bunny
 
-        public Bunny(int m_pSex, int m_pColor, int m_pAge) //constructor of bunny
+        #region Properties
+
+        /// <summary>
+        /// TODO: comments above each property.
+        /// </summary>
+        public Sex Sex { get; private set; }
+
+        public Color Color { get; private set; }
+
+        public int Age { get; private set; }
+
+        public string Name { get; private set; }
+
+        #endregion
+
+        #region Ctor
+
+        /// <summary>
+        /// Constructor of bunny.
+        /// </summary>
+        /// <param name="m_pSex"></param>
+        /// <param name="m_pColor"></param>
+        /// <param name="m_pAge"></param>
+        public Bunny(string name, int sex, int color, int age)
         {
-            this.m_pSex = (Enums.Sex)m_pSex;
-            this.m_pColor = (Enums.Color)m_pColor;
-            this.m_pAge = m_pAge;
+            Sex = (Sex)sex;
+            Color = (Color)color;
+            Age = age;
+            Name = name;
 
-            return;
         }
 
-        public void setName(string m_pName)
-        {
-            this.m_pName = m_pName;
-        }
-
-        public string getValues()
-        {
-            Enums.Sex m_pSex = this.m_pSex;
-            Enums.Color m_pColor = this.m_pColor;
-            int m_pAge = this.m_pAge;
-            string m_pName = this.m_pName;
-
-            return "Bunny " + m_pName + " was burn. Features:\nGender: " + m_pSex + " Color: " + m_pColor + " Age: " + m_pAge; 
-        }
+        #endregion
     }
 }
