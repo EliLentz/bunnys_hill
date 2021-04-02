@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hill
+﻿namespace Hill
 {
 
-    #region List
+    #region ListWithIterator
     /// <summary>
     /// here we will use a list to save and control all the bunnies
     /// </summary>
     class Hill<T>
     {
-        Node<T> m_pHead; //first element of list
-        Node<T> m_pTail; //last element of list
-        Node<T> m_pCurrent; //current element of list
-        int count = 0; //quantity of elements
+        private Node<T> m_pHead; //first element of list
+        private Node<T> m_pTail; //last element of list
+        public Node<T> m_pCurrent { get;private set; } //current element of list
+        public int count { get; private set; } //quantity of elements
 
         /// <summary>
         /// this method adds a new item to the end of the list
         /// </summary>
         /// <param name="data"></param>
-        public void Push_Back(T data)
+        public void PushBack(T data)
         {
             Node<T> node = new Node<T>(data);
 
@@ -36,49 +29,74 @@ namespace Hill
                 m_pTail.pnext = node;
                 m_pTail.pnext.pprev = m_pTail;
             }
+            m_pTail = node;
 
-            m_pTail = node; 
             count++;
         }
-        
+
         /// <summary>
-        /// this method remove the element from list
-        /// 
-        /// Firstly, this method starts to search the needing element from begin
-        /// if found, then deletes it
-        /// if not found, it returns nothing
+        /// this method erases the node and swaps the value one back
         /// </summary>
-        /// <param name="data"></param>
-        public void DeleteBunny(T data)
+        public void EraseNode()
         {
-            m_pCurrent = m_pHead;
-
-            while (m_pCurrent != null)
+            if (m_pCurrent == null)
             {
+                return;
+            }
 
-                if (m_pCurrent.Data.Equals(data))
+            if (m_pHead == m_pTail)
+            {
+                m_pCurrent = null;
+            }
+            else{
+                if (m_pCurrent == m_pHead)
                 {
-                    if (m_pCurrent == m_pHead)
-                    {
-                        m_pHead = m_pHead.pnext;
-                        m_pHead.pprev = null;
-                        m_pCurrent = m_pHead;
-                    }
-                    else if (m_pCurrent == m_pTail)
-                    {
-                        m_pTail = m_pTail.pprev;
-                        m_pTail.pnext = null;
-                        m_pCurrent = m_pTail;
-                    }
-                    count--;
+                    m_pHead = m_pHead.pnext;
+                    m_pHead.pprev = null;
+                    m_pCurrent = m_pHead;
+                }
+                else if (m_pCurrent == m_pTail)
+                {
+                    m_pTail = m_pTail.pprev;
+                    m_pTail.pnext = null;
+                    m_pCurrent = m_pTail;
                 }
                 else
                 {
-                    m_pCurrent = m_pCurrent.pnext;
+
                 }
             }
+            count--;
+        }
 
-            return;
+        /// <summary>
+        /// returns the current value to the first node
+        /// </summary>
+        public void Reset()
+        {
+            if (m_pHead == null)
+            {
+                return;
+            }
+            m_pCurrent = m_pHead;
+        }
+
+        /// <summary>
+        /// returns the value of the iterator one forward
+        /// </summary>
+        public void MoveNext()
+        {
+            if (m_pHead == null)
+            {
+                return;
+            }else if (m_pCurrent == m_pTail || m_pHead == m_pTail)
+            {
+                m_pCurrent = m_pTail;
+            }
+            else
+            {
+                m_pCurrent = m_pCurrent.pnext;
+            }
         }
     }
     #endregion

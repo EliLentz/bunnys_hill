@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bunnys_hill
+﻿namespace bunnys_hill
 {
 
     /// <summary>
@@ -16,5 +10,4 @@ namespace bunnys_hill
     /// list of types of a bunny's color
     /// </summary>
     public enum Color { white, black, brown, spotted }
-
 }

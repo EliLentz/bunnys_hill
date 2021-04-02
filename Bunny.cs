@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bunnys_hill
+﻿namespace bunnys_hill
 {
     /// <summary>
     /// Our bunny in the watership.
@@ -14,16 +8,13 @@ namespace bunnys_hill
 
         #region Properties
 
-        /// <summary>
-        /// TODO: comments above each property.
-        /// </summary>
-        public Sex Sex { get; private set; }
+        public Sex Sex { get; private set; } //bunny's gender (male or female)
 
-        public Color Color { get; private set; }
+        public Color Color { get; private set; } //bunny's color (white, black, brown, spotted)
 
-        public int Age { get; private set; }
+        public int Age { get; private set; } //bunny's age (0 - 10)
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } //bunny's name
 
         #endregion
 

@@ -1,10 +1,4 @@
 ﻿using bunnys_hill;
-using Hill;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bunnies
 {
@@ -12,10 +6,11 @@ namespace Bunnies
     {
         static void Main(string[] args)
         {
-            Logic.GenerateRandomBunnies(5); //giving random features (color and gender)for the bunnies
+            Bunny[] bunnies;//creating bunnies
 
-            Console.ReadKey();
+            bunnies = Logic.GenerateInitialBunnies(5); //giving random features (color and gender)for the bunnies
 
+            StartCircle startCircle = new StartCircle(bunnies); //starting the circly of bunny's life
         }
     }
 }
