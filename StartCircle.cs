@@ -47,7 +47,7 @@ namespace Bunnies
                     ex_sex = hill.m_pCurrent.Data.Sex;
                     ex_color = hill.m_pCurrent.Data.Color;
                     ex_age = hill.m_pCurrent.Data.Age;
-                    ex_name = hill.m_pCurrent.Data.Name;--
+                    ex_name = hill.m_pCurrent.Data.Name;
 
                     if (ex_sex == Sex.female)//adulthood test
                     {
