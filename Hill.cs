@@ -63,7 +63,11 @@
                 }
                 else
                 {
-
+                    Node<T> ex_node = m_pCurrent;
+                    m_pCurrent.pprev.pnext = m_pCurrent.pnext;
+                    m_pCurrent.pnext.pprev = m_pCurrent.pprev;
+                    m_pCurrent = m_pCurrent.pprev;
+                    ex_node = null;
                 }
             }
             count--;

@@ -9,7 +9,9 @@ namespace Bunnies
         public const int ADULT_AGE = 2;//from 2 - 10 bunny is adult and ready to care the kids
         const int InitialAge = 0;
 
-        ///static int count_name = 0;// this is for laziest + line 33 and 39
+        public static int count_newBunny = 0;//how many bunnies were born
+
+        ///static int count_name = 0;// this is for laziest + line 33 and 39(integer names)
 
         /// <summary>
         /// A method for generating random bunnies.
@@ -26,18 +28,19 @@ namespace Bunnies
                 int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
                 int generatedColor = random.Next(Enum.GetNames(typeof(Color)).Length);
 
-                Console.Write("Please, Enter " + (Sex)generatedSex + " Bunny's name: ");
+                Console.Write("Please, Enter " + (Sex)generatedSex + " Bunny's name: ");//for custom names
 
-                string givenName = Console.ReadLine();
+                string givenName = Console.ReadLine();//for custom names
 
-                ///string givenName = count_name.ToString(); this is for laziest + line 12 and 39
+                ///string givenName = count_name.ToString();// this is for laziest + line 12 and 39(integer names)
 
                 Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, InitialAge);
 
                 bunny_arr[i] = generatedBunny;
 
-                ///count_name++; //this is for laziest + line 12 and 33
+                ///count_name++; //this is for laziest + line 12 and 33(integer names)
             }
+            PrintNewBunnies(bunny_arr);
 
             return bunny_arr;
         }
@@ -56,7 +59,7 @@ namespace Bunnies
             for (int i = 0; i < initialNumberOfBunnies; i++)
             {
                 int generatedSex;
-                if (i % 2 == 0)//
+                if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
                 {
                     generatedSex = (int)Sex.female;
                 }
@@ -74,8 +77,22 @@ namespace Bunnies
 
                 bunny_arr[i] = generatedBunny;
             }
+            PrintNewBunnies(bunny_arr);
 
             return bunny_arr;
+        }
+
+        /// <summary>
+        /// this method print the new bunnies, what were born this year
+        /// </summary>
+        /// <param name="bunny_arr"></param>
+        public static void PrintNewBunnies(Bunny [] bunny_arr)
+        {
+            for (int i = 0; i < bunny_arr.Length; i++)
+            {
+                Console.WriteLine("Bunny " + bunny_arr[i].Name + " was born. Color: " + (Color)bunny_arr[i].Color + ", Sex: " + (Sex)bunny_arr[i].Sex);
+            }
+            count_newBunny = bunny_arr.Length;
         }
     }
 }
