@@ -6,7 +6,6 @@ namespace Bunnies
 {
     public class StartCircle
     {
-        const int MAX_YEAR = 1000; // max year is 1000 (starts from 0)
         public static int CUR_YEAR { get; private set; } //current year (starts from 0)
 
         private int count_deadBunny = 0;//how many bunnies were died
@@ -29,7 +28,7 @@ namespace Bunnies
                 hill.PushBack(bunnies[i]);
             }
 
-            for (int i = 0; i < MAX_YEAR; i++)//circle in rage 1000 years
+            while (hill.count != 0)//circle in endless rage
             {
                 hill.Reset();//starting the circle from begin
 
@@ -38,20 +37,10 @@ namespace Bunnies
 
                 ex_count = hill.count; //without it program doesn't work how it should work
 
-                for (int j = 0; j < ex_count; j++)
-                {
-                    if (hill.m_pCurrent.Data.Adult)//adulthood test
-                    {
-                        if (hill.m_pCurrent.Data.Sex == Sex.female)
-                        {
-                            count_adult_female++;
-                        }
-                        else
-                        {
-                            count_adult_male++;
-                        }
-                    }
+                Hill<Color> fColor = new Hill<Color>();//list of adult female colors
 
+                for (int i = 0; i < ex_count; i++)
+                {
                     if (hill.m_pCurrent.Data.Old)//old age test
                     {
                         Console.WriteLine(hill.m_pCurrent.Data.Name + " died");
@@ -60,17 +49,38 @@ namespace Bunnies
                     }
                     else
                     {
+                        if (hill.m_pCurrent.Data.Adult)//adulthood test
+                        {
+                            if (hill.m_pCurrent.Data.Sex == Sex.female)
+                            {
+                                count_adult_female++;
+                                fColor.PushBack(hill.m_pCurrent.Data.Color);
+                            }
+                            else
+                            {
+                                count_adult_male++;
+                            }
+                        }
                         hill.m_pCurrent.Data.Age++;
+
                         hill.MoveNext();
                     }
                 }
 
-                if (count_adult_female > 1 && count_adult_male > 1)//new bunnies are created here
+                if (count_adult_female >= 1 && count_adult_male >= 1)//new bunnies are created here
                 {
-                    Bunny[] new_bunnies = Logic.GenerateRandomBunnies(count_adult_female);
-                    for (int j = 0; j < new_bunnies.Length; j++)
+                    Color[] fColor_arr = new Color[count_adult_female];//array of adult female colors
+
+                    fColor.Reset();
+                    for (int i = 0; i < count_adult_female; i++)
                     {
-                        hill.PushBack(new_bunnies[j]);
+                        fColor_arr[i] = fColor.m_pCurrent.Data;
+                        fColor.MoveNext();
+                    }
+                    Bunny[] new_bunnies = Logic.GenerateRandomBunnies(count_adult_female ,fColor_arr);
+                    for (int i = 0; i < new_bunnies.Length; i++)
+                    {
+                        hill.PushBack(new_bunnies[i]);
                     }
                 }
 

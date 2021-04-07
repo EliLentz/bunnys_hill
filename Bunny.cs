@@ -1,14 +1,21 @@
-﻿namespace bunnys_hill
+﻿using System;
+
+namespace bunnys_hill
 {
     /// <summary>
     /// Our bunny in the watership.
     /// </summary>
     public class Bunny
     {
+        public const int InitialAge = 0;
+        public const int MAX_AGE = 10;//maximum age of bunny
+        public const int ADULT_AGE = 2;//from 2 - 10 bunny is adult and ready to care the kids
 
         #region Properties
 
-        private int _age = 0;//bunny's age (0 - 10)
+        private int isAge = 0;//bunny's age (0 - 10)
+        private bool isAdult = false;// if the age of the bunny is more than 2, then he is an adult
+        private bool isOld = false;//how old is this bunny (if the bunny turns 10, he will die)
 
         public Sex Sex { get; private set; } //bunny's gender (male or female)
 
@@ -18,34 +25,53 @@
         {
             get
             {
-                return _age;
+                return isAge;
             }
             set
             {
                 #region Tests
-                if (value >= 10)
+                if (value >= MAX_AGE)
                 {
-                    value = 10;
+                    value = MAX_AGE;
                     Old = true;
-                }else if (value < 0)
+                }else if (value < InitialAge)
                 {
-                    value = 0;
+                    value = InitialAge;
                 }
-                if (value >= 2)
+                if (value >= ADULT_AGE)
                 {
-                    Adult = true;
+                    isAdult = true;
                 }
                 #endregion
-                _age = value;
+                isAge = value;
             }
         }
 
         public string Name { get; private set; } //bunny's name
 
-        public bool Adult { get;private set; }// if the age of the bunny is more than 2, then he is an adult
+        public bool Adult 
+        {
+            get
+            {
+                return isAdult;
+            }
+            private set
+            {
+                isAdult = value;
+            }
+        }
 
-        public bool Old { get; private set; }//how old is this bunny (if the bunny turns 10, he will die)
-
+        public bool Old
+        {
+            get
+            {
+                return isOld;
+            }
+            private set
+            {
+                isOld = value;
+            }
+        }
         #endregion
 
         #region Ctor
@@ -63,7 +89,6 @@
             Age = age;
             Name = name;
         }
-
         #endregion
     }
 }
