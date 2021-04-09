@@ -46,30 +46,38 @@ namespace Bunnies
         /// </summary>
         /// <param name="color"></param>
         /// <returns>An array of the generated bunnies</returns>
-        public static Bunny[] GenerateRandomBunnies(int numberOfBunnies, Color []color)
+        public static Bunny[] GenerateRandomBunnies(int numberOfFemaleBunnies, int numberOfMaleBunnies, Color []color)
         {
-            Bunny[] bunny_arr = new Bunny[numberOfBunnies];
+            Bunny[] bunny_arr = new Bunny[numberOfFemaleBunnies*numberOfMaleBunnies];
 
             Random random = new Random();
-            for (int i = 0; i < numberOfBunnies; i++)
+
+            int ex_count = 0;
+
+            for (int i = 0; i < numberOfFemaleBunnies; i++)
             {
-                int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
-                int generatedColor = (int)color[i];//gives the rabbit the mother's color
-                string givenName;//the name is given from the list depending on the gender of the bunny
-
-                if ((Sex)generatedSex == Sex.female)
+                for (int j = 0; j < numberOfMaleBunnies; j++)
                 {
-                    givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
-                }
-                else
-                {
-                    givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
-                }
+                    int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
+                    int generatedColor = (int)color[i];//gives the rabbit the mother's color
+                    string givenName;//the name is given from the list depending on the gender of the bunny
 
-                Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
+                    if ((Sex)generatedSex == Sex.female)
+                    {
+                        givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
+                    }
+                    else
+                    {
+                        givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
+                    }
 
-                bunny_arr[i] = generatedBunny;
+                    Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
+
+                    bunny_arr[j + ex_count] = generatedBunny;
+                }
+                ex_count += numberOfMaleBunnies;
             }
+
             PrintNewBunnies(bunny_arr);
 
             return bunny_arr;

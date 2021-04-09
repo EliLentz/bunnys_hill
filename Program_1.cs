@@ -10,7 +10,7 @@ namespace Bunnies
 
             bunnies = Logic.GenerateInitialBunnies(5); //giving random features (color and gender)for the bunnies
 
-            StartCircle startCircle = new StartCircle(bunnies); //starting the circly of bunny's life
+            Hill.Hill hill = new Hill.Hill(bunnies); //starting the circly of bunny's life
         }
     }
 }

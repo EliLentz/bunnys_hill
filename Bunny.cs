@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace bunnys_hill
+﻿namespace bunnys_hill
 {
     /// <summary>
     /// Our bunny in the watership.
@@ -13,9 +11,7 @@ namespace bunnys_hill
 
         #region Properties
 
-        private int isAge = 0;//bunny's age (0 - 10)
-        private bool isAdult = false;// if the age of the bunny is more than 2, then he is an adult
-        private bool isOld = false;//how old is this bunny (if the bunny turns 10, he will die)
+        private int _age = 0;//bunny's age (0 - 10)
 
         public Sex Sex { get; private set; } //bunny's gender (male or female)
 
@@ -25,53 +21,20 @@ namespace bunnys_hill
         {
             get
             {
-                return isAge;
+                return _age;
             }
             set
             {
-                #region Tests
-                if (value >= MAX_AGE)
-                {
-                    value = MAX_AGE;
-                    Old = true;
-                }else if (value < InitialAge)
-                {
-                    value = InitialAge;
-                }
-                if (value >= ADULT_AGE)
-                {
-                    isAdult = true;
-                }
-                #endregion
-                isAge = value;
+                Tests(value);
+                _age = value;
             }
         }
 
         public string Name { get; private set; } //bunny's name
 
-        public bool Adult 
-        {
-            get
-            {
-                return isAdult;
-            }
-            private set
-            {
-                isAdult = value;
-            }
-        }
+        public bool isAdult { get; set; }// if the age of the bunny is more than 2, then he is an adult
 
-        public bool Old
-        {
-            get
-            {
-                return isOld;
-            }
-            private set
-            {
-                isOld = value;
-            }
-        }
+        public bool isOld { get; set; }//how old is this bunny (if the bunny turns 10, he will die)
         #endregion
 
         #region Ctor
@@ -88,6 +51,25 @@ namespace bunnys_hill
             Color = (Color)color;
             Age = age;
             Name = name;
+        }
+        #endregion
+
+        #region Tests
+        public void Tests(int value)
+        {
+            if (value >= MAX_AGE)
+            {
+                value = MAX_AGE;
+                isOld = true;
+            }
+            else if (value < InitialAge)
+            {
+                value = InitialAge;
+            }
+            if (value >= ADULT_AGE)
+            {
+                isAdult = true;
+            }
         }
         #endregion
     }

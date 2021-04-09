@@ -1,125 +1,102 @@
-﻿namespace Hill
-{
+﻿using Bunnies;
+using bunnys_hill;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-    #region ListWithIterator
+namespace Hill
+{
     /// <summary>
     /// here we will use a list to save and control all the bunnies
     /// </summary>
-    class Hill<T>
+    class Hill
     {
-        private Node<T> m_pHead; //first element of list
-        private Node<T> m_pTail; //last element of list
-        public Node<T> m_pCurrent { get;private set; } //current element of list
-        public int count { get; private set; } //quantity of elements
+        List<Bunny> _hill = new List<Bunny>();// the list of bunnys
+        List<Color> _f_color = new List<Color>();//list of adult female colors
+
+        public static int CUR_YEAR { get; private set; } //current year (starts from 0)
+
+        private int count_deadBunny = 0;//how many bunnies were died
 
         /// <summary>
-        /// this method adds a new item to the end of the list
+        /// the constructor that starts the "loop"
         /// </summary>
-        /// <param name="data"></param>
-        public void PushBack(T data)
+        /// <param name="bunnies">For start circle, constructor needs minimum 2 bunnies(male and female)</param>
+        public Hill(Bunny[] bunnies)
         {
-            Node<T> node = new Node<T>(data);
+            int count_adult_female;//how many adult female bunny's on the hill
+            int count_adult_male;//how many adult male bunny's on the hill
 
-            if (m_pHead == null)
+            for (int i = 0; i < bunnies.Length; i++)//circle begins from inital bunny's
             {
-                m_pHead = node;
-            }
-            else
-            {
-                m_pTail.pnext = node;
-                m_pTail.pnext.pprev = m_pTail;
-            }
-            m_pTail = node;
-
-            count++;
-        }
-
-        /// <summary>
-        /// this method erases the node and swaps the value one back
-        /// </summary>
-        public void EraseNode()
-        {
-            if (m_pCurrent == null)
-            {
-                return;
+                _hill.Add(bunnies[i]);
             }
 
-            if (m_pHead == m_pTail)
+            while (_hill.Count != 0)//circle in endless rage
             {
-                m_pCurrent = null;
-            }
-            else{
-                if (m_pCurrent == m_pHead)
+                IEnumerator<Bunny> _hill_enum = _hill.GetEnumerator();
+
+                _hill_enum.Reset();
+                _hill_enum.MoveNext();
+                _f_color.Clear();
+
+                count_adult_female = 0;
+                count_adult_male = 0;
+
+                foreach (Bunny bunny in _hill.ToList())
                 {
-                    m_pHead = m_pHead.pnext;
-                    m_pHead.pprev = null;
-                    m_pCurrent = m_pHead;
+                    if (bunny.isOld)//old age test
+                    {
+                        Console.WriteLine(bunny.Name + " died");
+                        _hill.Remove(bunny);
+                        count_deadBunny++;
+                    }
+                    else
+                    {
+                        if (bunny.isAdult)//adulthood test
+                        {
+                            if (bunny.Sex == Sex.female)
+                            {
+                                count_adult_female++;
+                                _f_color.Add(_hill_enum.Current.Color);
+                            }
+                            else
+                            {
+                                count_adult_male++;
+                            }
+                        }
+                        bunny.Age++;
+                    }
                 }
-                else if (m_pCurrent == m_pTail)
-                {
-                    m_pTail = m_pTail.pprev;
-                    m_pTail.pnext = null;
-                    m_pCurrent = m_pTail;
-                }
-                else
-                {
-                    Node<T> ex_node = m_pCurrent;
-                    m_pCurrent.pprev.pnext = m_pCurrent.pnext;
-                    m_pCurrent.pnext.pprev = m_pCurrent.pprev;
-                    m_pCurrent = m_pCurrent.pprev;
-                    ex_node = null;
-                }
-            }
-            count--;
-        }
 
-        /// <summary>
-        /// returns the current value to the first node
-        /// </summary>
-        public void Reset()
-        {
-            if (m_pHead == null)
-            {
-                return;
-            }
-            m_pCurrent = m_pHead;
-        }
+                IEnumerator<Color> _f_color_enum = _f_color.GetEnumerator();
 
-        /// <summary>
-        /// returns the value of the iterator one forward
-        /// </summary>
-        public void MoveNext()
-        {
-            if (m_pHead == null)
-            {
-                return;
-            }else if (m_pCurrent == m_pTail || m_pHead == m_pTail)
-            {
-                m_pCurrent = m_pTail;
-            }
-            else
-            {
-                m_pCurrent = m_pCurrent.pnext;
+                if (count_adult_female >= 1 && count_adult_male >= 1)//new bunnies are created here
+                {
+                    Color[] fColor_arr = new Color[count_adult_female];//array of adult female colors
+
+                    _f_color_enum.Reset();
+                    for (int i = 0; i < count_adult_female; i++)//filling the array by list for function "GenerateRandomBunnies()"
+                    {
+                        fColor_arr[i] = _f_color_enum.Current;
+                        _f_color_enum.MoveNext();
+                    }
+                    Bunny[] new_bunnies = Logic.GenerateRandomBunnies(count_adult_female, count_adult_male, fColor_arr);
+                    for (int i = 0; i < new_bunnies.Length; i++)
+                    {
+                        _hill.Add(new_bunnies[i]);
+                    }
+                }
+
+                Console.WriteLine("Born: " + Logic.count_newBunny + "\nDied: " + count_deadBunny);
+
+                count_deadBunny = 0;
+                Logic.count_newBunny = 0;
+
+                Console.ReadKey(); //tap to pass the year
+                Console.WriteLine("Year " + CUR_YEAR + " has passed");
+                CUR_YEAR++;
             }
         }
     }
-    #endregion
-    #region Node
-
-    /// <summary>
-    /// Constructor of Node for saving bunny
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    class Node<T>
-    {
-        public Node(T data)
-        {
-            Data = data;
-        }
-
-        public T Data { get; set; }
-        public Node<T> pnext { get; set; }
-        public Node<T> pprev { get; set; }
-    }
-    #endregion
 }
