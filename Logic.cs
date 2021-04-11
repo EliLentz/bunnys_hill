@@ -1,96 +1,69 @@
 ﻿using bunnys_hill;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bunnies
 {
     public class Logic
     {
-        public static int count_newBunny = 0;//how many bunnies were born
+        public static int countNewBunnies = 0;//how many bunnies were born
+        public static int countDeadBunnies = 0;//how many bunnies were died
 
+        //functions of this region change the number of bunnies
+        #region QuantitativeFunctions 
         /// <summary>
-        /// A method for generating random bunnies.
+        /// A method for generating new random born bunnies
         /// </summary>
-        /// <param name="numberOfBunnies"> How many bunnies to generate</param>
-        /// <returns>  </returns>
-        public static Bunny[] GenerateRandomBunnies(int numberOfBunnies)
+        /// <param name="currentBunnies"></param>
+        /// <returns>A List of the generated bunnies</returns>
+        public static List<Bunny> GenerateRandomBunnies(List<Bunny> currentBunnies)
         {
-            Bunny[] bunny_arr = new Bunny[numberOfBunnies];
+            List<Bunny> newBunnies = new List<Bunny>();
 
-            Random random = new Random();
-            for (int i = 0; i < numberOfBunnies; i++)
-            {
-                int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
-                int generatedColor = random.Next(Enum.GetNames(typeof(Color)).Length);
-                string givenName;//the name is given from the list depending on the gender of the bunny
-
-                if ((Sex)generatedSex == Sex.female)
-                {
-                    givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
-                }
-                else
-                {
-                    givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
-                }
-
-                Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
-
-                bunny_arr[i] = generatedBunny;
-            }
-            PrintNewBunnies(bunny_arr);
-
-            return bunny_arr;
-        }
-
-        /// <summary>
-        /// A method for generating random bunnies, but with mother's color
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns>An array of the generated bunnies</returns>
-        public static Bunny[] GenerateRandomBunnies(int numberOfFemaleBunnies, int numberOfMaleBunnies, Color []color)
-        {
-            Bunny[] bunny_arr = new Bunny[numberOfFemaleBunnies*numberOfMaleBunnies];
+            int quantMaleBunnies = GetAdultMaleBunnies(currentBunnies).Count;//quantity of adult male bunnies
+            List<Bunny> femaleBunnies = GetAdultFemaleBunnies(currentBunnies);//all current adult female bunnies
 
             Random random = new Random();
 
-            int ex_count = 0;
-
-            for (int i = 0; i < numberOfFemaleBunnies; i++)
+            foreach (Bunny bunny in currentBunnies)
             {
-                for (int j = 0; j < numberOfMaleBunnies; j++)
+                for (int i = 0; i < quantMaleBunnies; i++)
                 {
                     int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
-                    int generatedColor = (int)color[i];//gives the rabbit the mother's color
+                    int generatedColor = (int)bunny.Color;
                     string givenName;//the name is given from the list depending on the gender of the bunny
 
-                    if ((Sex)generatedSex == Sex.female)
+                    if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
                     {
+                        generatedSex = (int)Sex.female;
                         givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
                     }
                     else
                     {
+                        generatedSex = (int)Sex.male;
                         givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
                     }
 
                     Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
 
-                    bunny_arr[j + ex_count] = generatedBunny;
+                    newBunnies.Add(generatedBunny);
                 }
-                ex_count += numberOfMaleBunnies;
             }
 
-            PrintNewBunnies(bunny_arr);
+            PrintNewBunnies(newBunnies);
 
-            return bunny_arr;
+            return newBunnies;
         }
 
         /// <summary>
         /// A method for generating random bunnies, but with initial genders.
         /// </summary>
         /// <param name="initialNumberOfBunnies"></param>
-        /// <returns>An array of the generated bunnies</returns>
-        public static Bunny[] GenerateInitialBunnies(int initialNumberOfBunnies)
+        /// <returns>A List of the generated bunnies</returns>
+        public static List<Bunny> GenerateInitialBunnies(int initialNumberOfBunnies)
         {
-            Bunny[] bunny_arr = new Bunny[initialNumberOfBunnies];
+            List<Bunny> initialBunnies = new List<Bunny>();
 
             Random random = new Random();
 
@@ -113,24 +86,93 @@ namespace Bunnies
 
                 Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
 
-                bunny_arr[i] = generatedBunny;
+                initialBunnies.Add(generatedBunny);
             }
-            PrintNewBunnies(bunny_arr);
+            PrintNewBunnies(initialBunnies);
 
-            return bunny_arr;
+            return initialBunnies;
         }
 
+        /// <summary>
+        /// this method adds one year to the bunny's age
+        /// </summary>
+        /// <param name="currentBunnies"></param>
+        public static void AddYearToBunnies(List<Bunny> currentBunnies)
+        {
+            foreach (Bunny bunny in currentBunnies)
+            {
+                bunny.Age++;
+            }
+        }
+
+        /// <summary>
+        /// this method kills all bunnies over the age of 10
+        /// </summary>
+        /// <param name="currentBunnies"></param>
+        public static void KillOldBunnies(List<Bunny> currentBunnies)
+        {
+            foreach (Bunny bunny in currentBunnies.ToList())
+            {
+                if (bunny.isOld)
+                {
+                    PrintDeadBunny(bunny);
+                    currentBunnies.Remove(bunny);
+                    countDeadBunnies++;
+                }
+            }
+        }
+        #endregion
+
+        //functions of this region change the number of bunnies
+        #region Print
         /// <summary>
         /// this method print the new bunnies, what were born this year
         /// </summary>
         /// <param name="bunny_arr"></param>
-        public static void PrintNewBunnies(Bunny [] bunny_arr)
+        public static void PrintNewBunnies(List<Bunny> newBunnies)
         {
-            for (int i = 0; i < bunny_arr.Length; i++)
+            foreach (Bunny bunny in newBunnies)
             {
-                Console.WriteLine("Bunny " + bunny_arr[i].Name + " was born. Color: " + (Color)bunny_arr[i].Color + ", Sex: " + (Sex)bunny_arr[i].Sex);
+                Console.WriteLine("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
             }
-            count_newBunny = bunny_arr.Length;
+            countNewBunnies = newBunnies.Count;
         }
+
+        /// <summary>
+        /// this method print the name of the dead bunny, what was died this year
+        /// </summary>
+        /// <param name="curDeadBunny"></param>
+        public static void PrintDeadBunny(Bunny curDeadBunny) 
+        {
+            Console.WriteLine(curDeadBunny.Name + " died");
+        }
+        #endregion
+
+        #region HelpFunctions
+        /// <summary>
+        /// this function get all adult male bunnies
+        /// </summary>
+        /// <param name="currentBunnies"></param>
+        /// <returns></returns>
+        private static List<Bunny> GetAdultMaleBunnies(List<Bunny> currentBunnies)
+        {
+            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.male && bunny.isAdult);
+
+            return maleBunnies.ToList();
+        }
+
+        /// <summary>
+        /// this function get all adult male bunnies
+        /// </summary>
+        /// <param name="currentBunnies"></param>
+        /// <returns></returns>
+        private static List<Bunny> GetAdultFemaleBunnies(List<Bunny> currentBunnies)
+        {
+            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.female && bunny.isAdult);
+
+            return femaleBunnies.ToList();
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using bunnys_hill;
+using System.Collections.Generic;
 
 namespace Bunnies
 {
@@ -6,7 +7,7 @@ namespace Bunnies
     {
         static void Main(string[] args)
         {
-            Bunny[] bunnies; ;//creating initial bunnies
+            List<Bunny> bunnies;//creating initial bunnies
 
             bunnies = Logic.GenerateInitialBunnies(5); //giving random features (color and gender)for the bunnies
 

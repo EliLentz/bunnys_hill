@@ -25,7 +25,7 @@
             }
             set
             {
-                Tests(value);
+                AgeTests(value);
                 _age = value;
             }
         }
@@ -55,7 +55,11 @@
         #endregion
 
         #region Tests
-        public void Tests(int value)
+        /// <summary>
+        /// this function checks the state of the bunny when its age changes
+        /// </summary>
+        /// <param name="value"></param>
+        public void AgeTests(int value)
         {
             if (value >= MAX_AGE)
             {
