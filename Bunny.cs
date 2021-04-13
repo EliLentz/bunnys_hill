@@ -1,40 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bunnys_hill
+﻿namespace bunnys_hill
 {
+    /// <summary>
+    /// Our bunny in the watership.
+    /// </summary>
     public class Bunny
     {
-        private Enums.Sex m_pSex = new Enums.Sex();
-        private Enums.Color m_pColor = new Enums.Color();
-        private int m_pAge; // 0 - 10
-        private string m_pName; //name of Bunny
+        public const int InitialAge = 0;
+        public const int MAX_AGE = 10;//maximum age of bunny
+        public const int ADULT_AGE = 2;//from 2 - 10 bunny is adult and ready to care the kids
 
-        public Bunny(int m_pSex, int m_pColor, int m_pAge) //constructor of bunny
+        #region Properties
+
+        private int _age = 0;//bunny's age (0 - 10)
+
+        public Sex Sex { get; private set; } //bunny's gender (male or female)
+
+        public Color Color { get; private set; } //bunny's color (white, black, brown, spotted)
+
+        public int Age 
         {
-            this.m_pSex = (Enums.Sex)m_pSex;
-            this.m_pColor = (Enums.Color)m_pColor;
-            this.m_pAge = m_pAge;
-
-            return;
+            get
+            {
+                return _age;
+            }
+            set
+            {
+                AgeTests(value);
+                _age = value;
+            }
         }
 
-        public void setName(string m_pName)
-        {
-            this.m_pName = m_pName;
-        }
+        public string Name { get; private set; } //bunny's name
 
-        public string getValues()
-        {
-            Enums.Sex m_pSex = this.m_pSex;
-            Enums.Color m_pColor = this.m_pColor;
-            int m_pAge = this.m_pAge;
-            string m_pName = this.m_pName;
+        public bool isAdult { get; set; }// if the age of the bunny is more than 2, then he is an adult
 
-            return "Bunny " + m_pName + " was burn. Features:\nGender: " + m_pSex + " Color: " + m_pColor + " Age: " + m_pAge; 
+        public bool isOld { get; set; }//how old is this bunny (if the bunny turns 10, he will die)
+        #endregion
+
+        #region Ctor
+
+        /// <summary>
+        /// Constructor of bunny.
+        /// </summary>
+        /// <param name="m_pSex"></param>
+        /// <param name="m_pColor"></param>
+        /// <param name="m_pAge"></param>
+        public Bunny(string name, int sex, int color, int age)
+        {
+            Sex = (Sex)sex;
+            Color = (Color)color;
+            Age = age;
+            Name = name;
         }
+        #endregion
+
+        #region Tests
+        /// <summary>
+        /// this function checks the state of the bunny when its age changes
+        /// </summary>
+        /// <param name="value"></param>
+        public void AgeTests(int value)
+        {
+            if (value >= MAX_AGE)
+            {
+                value = MAX_AGE;
+                isOld = true;
+            }
+            else if (value < InitialAge)
+            {
+                value = InitialAge;
+            }
+            if (value >= ADULT_AGE)
+            {
+                isAdult = true;
+            }
+        }
+        #endregion
     }
 }
