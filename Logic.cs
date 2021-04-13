@@ -89,7 +89,7 @@ namespace Bunnies
 
         #region TimeOfHill
         /// <summary>
-        /// 
+        /// This function pass a year every 3 seconds
         /// </summary>
         public static void TimesHill()
         {
