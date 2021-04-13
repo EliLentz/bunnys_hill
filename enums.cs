@@ -4,12 +4,12 @@
     /// <summary>
     /// list of types of bunny's gender
     /// </summary>
-    public enum Sex { male, female }
+    public enum Sex { Male, Female }
 
     /// <summary>
     /// list of types of bunny's color
     /// </summary>
-    public enum Color { white, black, brown, spotted }
+    public enum Color { White, Black, Brown, Spotted }
 
     /// <summary>
     /// list of female bunny's names(100)

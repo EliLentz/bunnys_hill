@@ -50,7 +50,7 @@ namespace Hill
                 Logic.countDeadBunnies = 0;
                 Logic.countNewBunnies = 0;
 
-                Console.ReadKey(); //tap to pass the year
+                Logic.TimesHill();
                 Console.WriteLine("Year " + CUR_YEAR + " has passed");
                 CUR_YEAR++;
             }

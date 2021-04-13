@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Bunnies
 {
@@ -26,22 +27,22 @@ namespace Bunnies
 
             Random random = new Random();
 
-            foreach (Bunny bunny in currentBunnies)
+            foreach (Bunny fBunny in femaleBunnies)
             {
                 for (int i = 0; i < quantMaleBunnies; i++)
                 {
                     int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
-                    int generatedColor = (int)bunny.Color;
+                    int generatedColor = (int)fBunny.Color;
                     string givenName;//the name is given from the list depending on the gender of the bunny
 
                     if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
                     {
-                        generatedSex = (int)Sex.female;
+                        generatedSex = (int)Sex.Female;
                         givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
                     }
                     else
                     {
-                        generatedSex = (int)Sex.male;
+                        generatedSex = (int)Sex.Male;
                         givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
                     }
 
@@ -54,43 +55,6 @@ namespace Bunnies
             PrintNewBunnies(newBunnies);
 
             return newBunnies;
-        }
-
-        /// <summary>
-        /// A method for generating random bunnies, but with initial genders.
-        /// </summary>
-        /// <param name="initialNumberOfBunnies"></param>
-        /// <returns>A List of the generated bunnies</returns>
-        public static List<Bunny> GenerateInitialBunnies(int initialNumberOfBunnies)
-        {
-            List<Bunny> initialBunnies = new List<Bunny>();
-
-            Random random = new Random();
-
-            for (int i = 0; i < initialNumberOfBunnies; i++)
-            {
-                int generatedColor = random.Next(Enum.GetNames(typeof(Color)).Length);
-                int generatedSex;
-                string givenName;//the name is given from the list depending on the gender of the bunny
-
-                if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
-                {
-                    generatedSex = (int)Sex.female;
-                    givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
-                }
-                else
-                {
-                    generatedSex = (int)Sex.male;
-                    givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
-                }
-
-                Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
-
-                initialBunnies.Add(generatedBunny);
-            }
-            PrintNewBunnies(initialBunnies);
-
-            return initialBunnies;
         }
 
         /// <summary>
@@ -120,6 +84,16 @@ namespace Bunnies
                     countDeadBunnies++;
                 }
             }
+        }
+        #endregion
+
+        #region TimeOfHill
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void TimesHill()
+        {
+            Thread.Sleep(3000);
         }
         #endregion
 
@@ -156,7 +130,7 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetAdultMaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.male && bunny.isAdult);
+            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Male && bunny.isAdult);
 
             return maleBunnies.ToList();
         }
@@ -168,11 +142,10 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetAdultFemaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.female && bunny.isAdult);
+            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Female && bunny.isAdult);
 
             return femaleBunnies.ToList();
         }
-
         #endregion
     }
 }
