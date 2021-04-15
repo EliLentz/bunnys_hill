@@ -12,7 +12,7 @@ namespace Bunnies
         public static int countNewBunnies = 0;//how many bunnies were born
         public static int countDeadBunnies = 0;//how many bunnies were died
 
-        private static volatile bool stopFlow = false;
+        private static volatile bool stopFlow = false;//Regulates flow stopping
 
         //functions of this region change the number of bunnies
         #region QuantitativeFunctions 
