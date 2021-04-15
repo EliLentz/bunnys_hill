@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bunnies
 {
@@ -10,6 +11,8 @@ namespace Bunnies
     {
         public static int countNewBunnies = 0;//how many bunnies were born
         public static int countDeadBunnies = 0;//how many bunnies were died
+
+        private static volatile bool stopFlow = false;
 
         //functions of this region change the number of bunnies
         #region QuantitativeFunctions 
@@ -88,12 +91,42 @@ namespace Bunnies
         #endregion
 
         #region TimeOfHill
+
         /// <summary>
         /// This function pass a year every 3 seconds
         /// </summary>
         public static void TimesHill()
         {
             Thread.Sleep(3000);
+
+            while (stopFlow)
+            {
+                Task taskStopper = Stopper();
+                taskStopper.Start();
+            }
+        }
+
+        /// <summary>
+        /// This function stops the loops and outputting data to the console
+        /// and print about status of the flow
+        /// </summary>
+        /// <returns>Task of stopper</returns>
+        public static Task Stopper()
+        {
+            Task taskStopper = new Task(() => {
+                while (Console.ReadKey().Key != ConsoleKey.Enter) ;
+                if (stopFlow == false)
+                {
+                    stopFlow = true;
+                    Console.WriteLine("Console operations have stopped");
+                }
+                else 
+                {
+                    stopFlow = false;
+                    Console.WriteLine("Сonsole operations have resumed");
+                }
+            });
+            return taskStopper;
         }
         #endregion
 
@@ -107,6 +140,7 @@ namespace Bunnies
         {
             foreach (Bunny bunny in newBunnies)
             {
+                while (stopFlow) ;
                 Console.WriteLine("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
             }
             countNewBunnies = newBunnies.Count;
@@ -118,6 +152,7 @@ namespace Bunnies
         /// <param name="curDeadBunny"></param>
         public static void PrintDeadBunny(Bunny curDeadBunny) 
         {
+            while (stopFlow) ;
             Console.WriteLine(curDeadBunny.Name + " died");
         }
         #endregion

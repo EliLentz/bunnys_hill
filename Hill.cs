@@ -2,6 +2,7 @@
 using bunnys_hill;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Hill
 {
@@ -34,10 +35,14 @@ namespace Hill
         /// </summary>
         private void TheCycleOfLife()
         {
-            while (_hill.Count != 0)//circle in endless rage
+            while (_hill.Count != 0)
             {
+                Task taskStopper = Logic.Stopper();
+
+                taskStopper.Start();
+
                 Logic.KillOldBunnies(_hill);
-                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_hill);
+                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_hill);//should be async
                 foreach (Bunny bunny in newBunnies)
                 {
                     _hill.Add(bunny);
@@ -51,6 +56,7 @@ namespace Hill
                 Logic.countNewBunnies = 0;
 
                 Logic.TimesHill();
+
                 Console.WriteLine("Year " + CUR_YEAR + " has passed");
                 CUR_YEAR++;
             }
