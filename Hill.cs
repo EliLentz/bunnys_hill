@@ -26,23 +26,25 @@ namespace Hill
                 _hill.Add(bunny);
             }
 
-            TheCycleOfLife();
+            Logic.PrintNewBunnies(bunnies);
+
+            RunCycle();
         }
         #endregion
 
         /// <summary>
         /// this method starts the life cycle of bunnies
         /// </summary>
-        private void TheCycleOfLife()
+        private void RunCycle()
         {
-            while (_hill.Count != 0)
+            while (true)
             {
                 Task taskStopper = Logic.Stopper();
 
                 taskStopper.Start();
 
                 Logic.KillOldBunnies(_hill);
-                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_hill);//should be async
+                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_hill);
                 foreach (Bunny bunny in newBunnies)
                 {
                     _hill.Add(bunny);
@@ -55,7 +57,7 @@ namespace Hill
                 Logic.countDeadBunnies = 0;
                 Logic.countNewBunnies = 0;
 
-                Logic.TimesHill();
+                Logic.RunTime();
 
                 Console.WriteLine("Year " + CUR_YEAR + " has passed");
                 CUR_YEAR++;

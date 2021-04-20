@@ -12,7 +12,7 @@ namespace Bunnies
         public static int countNewBunnies = 0;//how many bunnies were born
         public static int countDeadBunnies = 0;//how many bunnies were died
 
-        private static volatile bool stopFlow = false;//Regulates flow stopping
+        private static bool stopFlow = false;//Regulates flow
 
         //functions of this region change the number of bunnies
         #region QuantitativeFunctions 
@@ -61,6 +61,42 @@ namespace Bunnies
         }
 
         /// <summary>
+        /// A method for generating random bunnies, but with initial genders.
+        /// </summary>
+        /// <param name="initialNumberOfBunnies"></param>
+        /// <returns>A List of the generated bunnies</returns>
+        public static List<Bunny> GenerateInitialBunnies(int initialNumberOfBunnies)
+        {
+            List<Bunny> initialBunnies = new List<Bunny>();
+
+            Random random = new Random();
+
+            for (int i = 0; i < initialNumberOfBunnies; i++)
+            {
+                int generatedColor = random.Next(Enum.GetNames(typeof(Color)).Length);
+                int generatedSex;
+                string givenName;//the name is given from the list depending on the gender of the bunny
+
+                if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
+                {
+                    generatedSex = (int)Sex.Female;
+                    givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
+                }
+                else
+                {
+                    generatedSex = (int)Sex.Male;
+                    givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
+                }
+
+                Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
+
+                initialBunnies.Add(generatedBunny);
+            }
+
+            return initialBunnies;
+        }
+
+        /// <summary>
         /// this method adds one year to the bunny's age
         /// </summary>
         /// <param name="currentBunnies"></param>
@@ -95,14 +131,21 @@ namespace Bunnies
         /// <summary>
         /// This function pass a year every 3 seconds
         /// </summary>
-        public static void TimesHill()
+        public static void RunTime()
         {
-            Thread.Sleep(3000);
+            const int timeOfSleeping = 3000;//a constant indicating how long the program should wait to skip a year
+
+            Thread.Sleep(timeOfSleeping);
+
+            Task taskStopper = Stopper();
+            taskStopper.Start();
 
             while (stopFlow)
             {
-                Task taskStopper = Stopper();
-                taskStopper.Start();
+                if (taskStopper.Status.Equals(true))
+                {
+                    taskStopper.Dispose();
+                }
             }
         }
 

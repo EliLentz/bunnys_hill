@@ -1,5 +1,5 @@
 ﻿using bunnys_hill;
-using Integerator;
+using XMLWork;
 using System.Collections.Generic;
 
 namespace Bunnies
@@ -12,9 +12,9 @@ namespace Bunnies
 
             //bunnies = Logic.GenerateInitialBunnies(5); //giving random features (color and gender)for the bunnies
 
-            string xmlFile = "InitailBunnies.xml"; //file's URL address
+            const string FILE_NAME = "InitailBunnies.xml"; //file's URL address
 
-            bunnies = IntegeratorXml.ConvertXmlToList(xmlFile);
+            bunnies = XMLReader.ConvertXmlToList(FILE_NAME);
 
             Hill.Hill hill = new Hill.Hill(bunnies); //starting the circly of bunny's life
         }
