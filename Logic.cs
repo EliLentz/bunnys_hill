@@ -247,7 +247,7 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetRegularAdultMaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Male && bunny.isAdult);
+            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Male && bunny.isAdult && bunny.isRadioactiveMutantVampireBunny != true);
 
             return maleBunnies.ToList();
         }
@@ -259,7 +259,7 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetRegularAdultFemaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Female && bunny.isAdult);
+            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Female && bunny.isAdult && bunny.isRadioactiveMutantVampireBunny != true);
 
             return femaleBunnies.ToList();
         }
