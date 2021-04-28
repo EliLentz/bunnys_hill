@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bunnies
 {
@@ -9,6 +11,8 @@ namespace Bunnies
     {
         public static int countNewBunnies = 0;//how many bunnies were born
         public static int countDeadBunnies = 0;//how many bunnies were died
+
+        private static bool stopFlow = false;//Regulates flow
 
         //functions of this region change the number of bunnies
         #region QuantitativeFunctions 
@@ -26,22 +30,22 @@ namespace Bunnies
 
             Random random = new Random();
 
-            foreach (Bunny bunny in currentBunnies)
+            foreach (Bunny fBunny in femaleBunnies)
             {
                 for (int i = 0; i < quantMaleBunnies; i++)
                 {
                     int generatedSex = random.Next(Enum.GetNames(typeof(Sex)).Length);
-                    int generatedColor = (int)bunny.Color;
+                    int generatedColor = (int)fBunny.Color;
                     string givenName;//the name is given from the list depending on the gender of the bunny
 
                     if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
                     {
-                        generatedSex = (int)Sex.female;
+                        generatedSex = (int)Sex.Female;
                         givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
                     }
                     else
                     {
-                        generatedSex = (int)Sex.male;
+                        generatedSex = (int)Sex.Male;
                         givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
                     }
 
@@ -75,12 +79,12 @@ namespace Bunnies
 
                 if (i % 2 == 0)// this so that there is an equal number of bunnies at the start
                 {
-                    generatedSex = (int)Sex.female;
+                    generatedSex = (int)Sex.Female;
                     givenName = ((FemaleNames)random.Next(Enum.GetNames(typeof(FemaleNames)).Length)).ToString();
                 }
                 else
                 {
-                    generatedSex = (int)Sex.male;
+                    generatedSex = (int)Sex.Male;
                     givenName = ((MaleNames)random.Next(Enum.GetNames(typeof(MaleNames)).Length)).ToString();
                 }
 
@@ -88,7 +92,6 @@ namespace Bunnies
 
                 initialBunnies.Add(generatedBunny);
             }
-            PrintNewBunnies(initialBunnies);
 
             return initialBunnies;
         }
@@ -123,6 +126,53 @@ namespace Bunnies
         }
         #endregion
 
+        #region TimeOfHill
+
+        /// <summary>
+        /// This function pass a year every 3 seconds
+        /// </summary>
+        public static void RunTime()
+        {
+            const int timeOfSleeping = 3000;//a constant indicating how long the program should wait to skip a year
+
+            Thread.Sleep(timeOfSleeping);
+
+            Task taskStopper = Stopper();
+            taskStopper.Start();
+
+            while (stopFlow)
+            {
+                if (taskStopper.Status.Equals(true))
+                {
+                    taskStopper.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function stops the loops and outputting data to the console
+        /// and print about status of the flow
+        /// </summary>
+        /// <returns>Task of stopper</returns>
+        public static Task Stopper()
+        {
+            Task taskStopper = new Task(() => {
+                while (Console.ReadKey().Key != ConsoleKey.Enter) ;
+                if (stopFlow == false)
+                {
+                    stopFlow = true;
+                    Console.WriteLine("Console operations have stopped");
+                }
+                else 
+                {
+                    stopFlow = false;
+                    Console.WriteLine("Сonsole operations have resumed");
+                }
+            });
+            return taskStopper;
+        }
+        #endregion
+
         //functions of this region change the number of bunnies
         #region Print
         /// <summary>
@@ -133,6 +183,7 @@ namespace Bunnies
         {
             foreach (Bunny bunny in newBunnies)
             {
+                while (stopFlow) ;
                 Console.WriteLine("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
             }
             countNewBunnies = newBunnies.Count;
@@ -144,6 +195,7 @@ namespace Bunnies
         /// <param name="curDeadBunny"></param>
         public static void PrintDeadBunny(Bunny curDeadBunny) 
         {
+            while (stopFlow) ;
             Console.WriteLine(curDeadBunny.Name + " died");
         }
         #endregion
@@ -156,7 +208,7 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetAdultMaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.male && bunny.isAdult);
+            IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Male && bunny.isAdult);
 
             return maleBunnies.ToList();
         }
@@ -168,11 +220,10 @@ namespace Bunnies
         /// <returns></returns>
         private static List<Bunny> GetAdultFemaleBunnies(List<Bunny> currentBunnies)
         {
-            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.female && bunny.isAdult);
+            IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Female && bunny.isAdult);
 
             return femaleBunnies.ToList();
         }
-
         #endregion
     }
 }
