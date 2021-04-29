@@ -146,7 +146,7 @@ namespace bunnys_hill
         {
             Random random = new Random();
 
-            int rNum = random.Next(0, 100);
+            int rNum = random.Next(101);
 
             if (rNum < 2)
             {

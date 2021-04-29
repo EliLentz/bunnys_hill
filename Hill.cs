@@ -1,5 +1,7 @@
 ﻿using Bunnies;
 using bunnys_hill;
+using End;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ namespace Hill
         List<Bunny> _hill = new List<Bunny>();// the list of bunnys
         public static int CUR_YEAR { get; private set; } //current year (starts from 0)
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Ctor
         /// <summary>
         /// the constructor that starts the "loop"
@@ -21,12 +25,14 @@ namespace Hill
         /// <param name="bunnies">For start circle, constructor needs minimum 2 bunnies(male and female)</param>
         public Hill(List<Bunny> bunnies)
         {
+            
+
             foreach (Bunny bunny in bunnies)//add initial bunnies to the loop
             {
                 _hill.Add(bunny);
             }
 
-            Logic.PrintNewBunnies(bunnies);
+            Print.PrintNewBunnies(bunnies);
 
             RunCycle();
         }
@@ -37,11 +43,16 @@ namespace Hill
         /// </summary>
         private void RunCycle()
         {
-            while (true)
+            while (!DoEnd.StatusVampireApocalype(_hill))//As long as there is at least one regular bunny, the program will keep working.
             {
-                Task taskStopper = Logic.Stopper();
+                Task taskStopper = Times.Stopper();
 
                 taskStopper.Start();
+
+                if (_hill.Count > 500)//if the quantity of bunnies is more then 500, they will die by natural causes
+                {
+                    Logic.KillHalf(_hill);
+                }
 
                 Logic.KillOldBunnies(_hill);
                 Logic.DoBite(_hill);
@@ -53,16 +64,23 @@ namespace Hill
 
                 Logic.AddYearToBunnies(_hill);
 
-                Console.WriteLine("Born: " + Logic.countNewBunnies + "\nDied: " + Logic.countDeadBunnies + "\nRadioactive Mutant Vampire: " + Logic.GetRadioactiveMutantVampireBunnies(_hill).Count);
+                logger.Info("Born: " + Print.countNewBunnies);
+                logger.Info("Died: " + Print.countDeadBunnies);
+                logger.Info("Radioactive Mutant Vampire: " + Logic.GetRadioactiveMutantVampireBunnies(_hill).Count);
+                Console.WriteLine("Born: " + Print.countNewBunnies + "\nDied: " + Print.countDeadBunnies + "\nRadioactive Mutant Vampire: " + Logic.GetRadioactiveMutantVampireBunnies(_hill).Count);
 
-                Logic.countDeadBunnies = 0;
-                Logic.countNewBunnies = 0;
+                Print.countDeadBunnies = 0;
+                Print.countNewBunnies = 0;
 
-                Logic.RunTime();
+                Times.RunTime();
 
+                logger.Info("Year " + CUR_YEAR + " has passed");
                 Console.WriteLine("Year " + CUR_YEAR + " has passed");
                 CUR_YEAR++;
             }
+
+            DoEnd.PrintEnd();
+
         }
     }
 }

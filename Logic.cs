@@ -2,20 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Bunnies
 {
     public class Logic
     {
-        public static int countNewBunnies = 0;//how many bunnies were born
-        public static int countDeadBunnies = 0;//how many bunnies were died
-
-        private static bool stopFlow = false;//Regulates flow
-
-        //functions of this region change the number of bunnies
-        #region QuantitativeFunctions 
+        #region GenerateBunnies
         /// <summary>
         /// A method for generating new random born bunnies
         /// </summary>
@@ -55,7 +47,7 @@ namespace Bunnies
                 }
             }
 
-            PrintNewBunnies(newBunnies);
+            Print.PrintNewBunnies(newBunnies);
 
             return newBunnies;
         }
@@ -108,6 +100,9 @@ namespace Bunnies
             }
         }
 
+        #endregion
+
+        #region KillBunnies
         /// <summary>
         /// this method kills all bunnies over the age of 10
         /// </summary>
@@ -118,12 +113,42 @@ namespace Bunnies
             {
                 if (bunny.isOld)
                 {
-                    PrintDeadBunny(bunny);
+                    Print.PrintDeadBunny(bunny);
                     currentBunnies.Remove(bunny);
-                    countDeadBunnies++;
+                    Print.countDeadBunnies++;
                 }
             }
         }
+
+        /// <summary>
+        /// this function kills half of randomly selected rabbits
+        /// </summary>
+        /// <param name="currentBunnies"></param>
+        public static void KillHalf(List<Bunny> currentBunnies)
+        {
+            int qBunnies = currentBunnies.Count / 2; //half of the current bunnies
+
+            Random random = new Random();
+
+            while (currentBunnies.Count > qBunnies)//until the number of bunnies is equal to half of the current value, kill random bunnies
+            {
+                foreach (Bunny bunny in currentBunnies.ToList())
+                {
+                    if (currentBunnies.Count > qBunnies)//one more check for the accuracy of the statement that exactly half of the rabbits were removed and not one more
+                    {
+                        if (random.Next(2) == 1)
+                        {
+                            Print.PrintDeadBunny(bunny);
+                            currentBunnies.Remove(bunny);
+                            Print.countDeadBunnies++;
+                        }
+                    }
+                    else return;
+                }   
+            }
+
+        }
+
         #endregion
 
         #region RadioactiveMutantVampireFuctions
@@ -150,101 +175,18 @@ namespace Bunnies
 
                 regularBunniesEnumerator.Current.isRadioactiveMutantVampireBunny = true;
 
-                PrintVampireBunnies(regularBunniesEnumerator.Current);
+                Print.PrintVampireBunnies(regularBunniesEnumerator.Current);
             }
         }
 
-        #endregion
-
-        #region TimeOfHill
-
-        /// <summary>
-        /// This function pass a year every 3 seconds
-        /// </summary>
-        public static void RunTime()
-        {
-            const int timeOfSleeping = 3000;//a constant indicating how long the program should wait to skip a year
-
-            Thread.Sleep(timeOfSleeping);
-
-            Task taskStopper = Stopper();
-            taskStopper.Start();
-
-            while (stopFlow)
-            {
-                if (taskStopper.Status.Equals(true))
-                {
-                    taskStopper.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// This function stops the loops and outputting data to the console
-        /// and print about status of the flow
-        /// </summary>
-        /// <returns>Task of stopper</returns>
-        public static Task Stopper()
-        {
-            Task taskStopper = new Task(() => {
-                while (Console.ReadKey().Key != ConsoleKey.Enter) ;
-                if (stopFlow == false)
-                {
-                    stopFlow = true;
-                    Console.WriteLine("Console operations have stopped");
-                }
-                else 
-                {
-                    stopFlow = false;
-                    Console.WriteLine("Сonsole operations have resumed");
-                }
-            });
-            return taskStopper;
-        }
-        #endregion
-
-        //functions of this region change the number of bunnies
-        #region Print
-        /// <summary>
-        /// this method print the new bunnies, what were born this year
-        /// </summary>
-        /// <param name="bunny_arr"></param>
-        public static void PrintNewBunnies(List<Bunny> newBunnies)
-        {
-            foreach (Bunny bunny in newBunnies)
-            {
-                while (stopFlow) ;
-                Console.WriteLine("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
-            }
-            countNewBunnies = newBunnies.Count;
-        }
-
-        /// <summary>
-        /// this method print the name of the dead bunny, what was died this year
-        /// </summary>
-        /// <param name="curDeadBunny"></param>
-        public static void PrintDeadBunny(Bunny curDeadBunny) 
-        {
-            while (stopFlow) ;
-            Console.WriteLine(curDeadBunny.Name + " died");
-        }
-
-
-        public static void PrintVampireBunnies(Bunny curVampireBunny)
-        {
-            while (stopFlow) ;
-            Console.WriteLine(curVampireBunny.Name + " is radioactive mutant vampire. Age: " + curVampireBunny.Age + " Color: " + curVampireBunny.Color + " Sex: " + curVampireBunny.Sex) ;
-        }
         #endregion
 
         #region HelpFunctions
 
         #region Quantitative
-        /// <summary>
-        /// this function gets all regular adult male bunnies
-        /// </summary>
+
         /// <param name="currentBunnies"></param>
-        /// <returns></returns>
+        /// <returns>all regular adult male bunnies</returns>
         private static List<Bunny> GetRegularAdultMaleBunnies(List<Bunny> currentBunnies)
         {
             IEnumerable<Bunny> maleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Male && bunny.isAdult && bunny.isRadioactiveMutantVampireBunny != true);
@@ -252,25 +194,20 @@ namespace Bunnies
             return maleBunnies.ToList();
         }
 
-        /// <summary>
-        /// this function gets all regular adult female bunnies
-        /// </summary>
         /// <param name="currentBunnies"></param>
-        /// <returns></returns>
+        /// <returns>all regular adult female bunnies</returns>
         private static List<Bunny> GetRegularAdultFemaleBunnies(List<Bunny> currentBunnies)
         {
             IEnumerable<Bunny> femaleBunnies = currentBunnies.Where(bunny => bunny.Sex == Sex.Female && bunny.isAdult && bunny.isRadioactiveMutantVampireBunny != true);
 
             return femaleBunnies.ToList();
         }
+
         #endregion
 
         #region Regular And Vampire
-        /// <summary>
-        /// this function gets all radioactive mutant vampire bunnies
-        /// </summary>
         /// <param name="currentBunnies"></param>
-        /// <returns></returns>
+        /// <returns>all vampire bunnies</returns>
         public static List<Bunny> GetRadioactiveMutantVampireBunnies(List<Bunny> currentBunnies)
         {
             IEnumerable<Bunny> radioactiveMutantVampireBunnies = currentBunnies.Where(bunny => bunny.isRadioactiveMutantVampireBunny == true);
@@ -278,11 +215,8 @@ namespace Bunnies
             return radioactiveMutantVampireBunnies.ToList();
         }
 
-        /// <summary>
-        /// this function gets all regular bunnies
-        /// </summary>
         /// <param name="currentBunnies"></param>
-        /// <returns></returns>
+        /// <returns>all regular bunnies</returns>
         private static List<Bunny> GetRegularBunnies(List<Bunny> currentBunnies)
         {
             IEnumerable<Bunny> regularBunnies = currentBunnies.Where(bunny => bunny.isRadioactiveMutantVampireBunny != true);
