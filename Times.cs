@@ -6,7 +6,13 @@ namespace Bunnies
 {
     public class Times
     {
-        public static bool stopFlow = false;//Regulates flow
+        /// <summary>
+        /// Regulates flow
+        /// while "true" the program is paused
+        /// </summary>
+        public static bool stopFlow = false;
+
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static void RunTime()
         {
@@ -38,11 +44,13 @@ namespace Bunnies
                 if (stopFlow == false)
                 {
                     stopFlow = true;
+                    logger.Info("Console operations have stopped");
                     Console.WriteLine("Console operations have stopped");
                 }
                 else
                 {
                     stopFlow = false;
+                    logger.Info("Сonsole operations have resumed");
                     Console.WriteLine("Сonsole operations have resumed");
                 }
             });

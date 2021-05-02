@@ -25,8 +25,8 @@ namespace End
 
         public static void PrintEnd()
         {
-            logger.Info("The cycle has ended, as only radioactive vampire rabbits remained on the watership, and soon their population would completely die out. Thanks for test simulator :)");
-            Console.WriteLine("\nThe cycle has ended, as only radioactive vampire rabbits remained on the watership, and soon their population would completely die out. Thanks for test simulator :)");
+            logger.Info("The cycle has ended, as only radioactive vampire rabbits remained on the watership, and soon their population would completely die out.");
+            Console.WriteLine("\nThe cycle has ended, as only radioactive vampire rabbits remained on the watership, and soon their population would completely die out.");
         }
 
         /// <param name="currentBunnies"></param>

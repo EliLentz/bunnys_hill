@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <Bunnies>
-  <Bunny Name ="Jack" Sex ="Male" Age ="2" Color ="Black"/>
-  <Bunny Name ="Carla" Sex ="Female" Age ="2" Color ="Brown"/>
-  <Bunny Name ="Jane" Sex ="Female" Age="3" Color="White"/>
+  <Bunny Name ="Jack" Sex ="Male" Age ="1" Color ="Black"/>
+  <Bunny Name ="Carla" Sex ="Female" Age ="1" Color ="Brown"/>
+  <Bunny Name ="Jane" Sex ="Female" Age="1" Color="White"/>
   <Bunny Name="Thumper" Sex="Male" Age="1" Color="Spotted"/>
 </Bunnies>

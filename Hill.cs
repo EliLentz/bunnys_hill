@@ -25,14 +25,19 @@ namespace Hill
         /// <param name="bunnies">For start circle, constructor needs minimum 2 bunnies(male and female)</param>
         public Hill(List<Bunny> bunnies)
         {
-            
-
             foreach (Bunny bunny in bunnies)//add initial bunnies to the loop
             {
+                if (bunny.isRadioactiveMutantVampireBunny != true)//
+                {
+                    Print.PrintNewBunny(bunny);
+                }
+                else
+                {
+                    Print.PrintVampireBunnies(bunny);
+                }
+
                 _hill.Add(bunny);
             }
-
-            Print.PrintNewBunnies(bunnies);
 
             RunCycle();
         }

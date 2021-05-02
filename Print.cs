@@ -12,15 +12,17 @@ namespace Bunnies
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static void PrintNewBunnies(List<Bunny> newBunnies)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newBunny"></param>
+        public static void PrintNewBunny(Bunny newBunny)
         {
-            foreach (Bunny bunny in newBunnies)
-            {
-                while (Times.stopFlow) ;
-                logger.Info("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
-                Console.WriteLine("Bunny " + bunny.Name + " was born. Color: " + bunny.Color + ", Sex: " + bunny.Sex);
-            }
-            countNewBunnies = newBunnies.Count;
+            while (Times.stopFlow) ;
+            logger.Info("Bunny " + newBunny.Name + " was born. Color: " + newBunny.Color + ", Sex: " + newBunny.Sex);
+            Console.WriteLine("Bunny " + newBunny.Name + " was born. Color: " + newBunny.Color + ", Sex: " + newBunny.Sex);
+
+            countNewBunnies++;
         }
 
         /// <summary>

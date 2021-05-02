@@ -20,7 +20,6 @@ namespace XMLWork
         /// <returns></returns>
         public static List<Bunny> ConvertXmlToList(string path)
         {
-
             try
             {
                 xDoc.Load(path);

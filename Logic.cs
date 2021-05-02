@@ -43,11 +43,19 @@ namespace Bunnies
 
                     Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
 
+                    if (generatedBunny.isRadioactiveMutantVampireBunny != true)//cheking whether the bunny was born a vampire or not
+                    {
+                        Print.PrintNewBunny(generatedBunny);
+                    }
+                    else
+                    {
+                        Print.PrintVampireBunnies(generatedBunny);
+                        Print.countNewBunnies++;
+                    }
+
                     newBunnies.Add(generatedBunny);
                 }
             }
-
-            Print.PrintNewBunnies(newBunnies);
 
             return newBunnies;
         }
@@ -81,6 +89,16 @@ namespace Bunnies
                 }
 
                 Bunny generatedBunny = new Bunny(givenName, generatedSex, generatedColor, Bunny.InitialAge);
+
+                if (generatedBunny.isRadioactiveMutantVampireBunny != true)//cheking whether the bunny was born a vampire or not
+                {
+                    Print.PrintNewBunny(generatedBunny);
+                }
+                else
+                {
+                    Print.PrintVampireBunnies(generatedBunny);
+                    Print.countNewBunnies++;
+                }
 
                 initialBunnies.Add(generatedBunny);
             }
@@ -161,14 +179,25 @@ namespace Bunnies
         {
             List<Bunny> vampireBunnies = GetRadioactiveMutantVampireBunnies(currentBunnies);
 
+            List<Bunny> regularBunnies = GetRegularBunnies(currentBunnies);//auxiliary variable
+
+            if (vampireBunnies.Count > regularBunnies.Count)//Reduce the number of vampire bunnies in the list until the number equals the number of regular bunnies(for fix the bug)
+            {
+                for (int i = vampireBunnies.Count - 1; i >= regularBunnies.Count; i--)
+                {
+                    vampireBunnies.RemoveAt(i);
+                }
+            }
+
             foreach (Bunny vampireBunny in vampireBunnies)
             {
-                List<Bunny> regularBunneis = GetRegularBunnies(currentBunnies);
-                IEnumerator<Bunny> regularBunniesEnumerator = regularBunneis.GetEnumerator();
+                List<Bunny> regularCurrentBunneis = GetRegularBunnies(currentBunnies);
+                IEnumerator<Bunny> regularBunniesEnumerator = regularCurrentBunneis.GetEnumerator();
 
                 Random random = new Random();
+                Bunny randomBunny = regularCurrentBunneis[random.Next(regularCurrentBunneis.Count)];//choose a random bunny to bite
 
-                while(regularBunniesEnumerator.Current != regularBunneis[random.Next(regularBunneis.Count)])
+                while(regularBunniesEnumerator.Current != randomBunny)//move on the next until we find the one we need to bite
                 {
                     regularBunniesEnumerator.MoveNext();
                 }
