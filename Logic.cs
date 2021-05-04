@@ -181,14 +181,19 @@ namespace Bunnies
 
             List<Bunny> regularBunnies = GetRegularBunnies(currentBunnies);//auxiliary variable
 
-            if (vampireBunnies.Count > regularBunnies.Count)//Reduce the number of vampire bunnies in the list until the number equals the number of regular bunnies(for fix the bug)
+            //if vampire bunnies are greater than or equal to the number of ordinary bunnies
+            //then there is no point in further loading the system - we make all ordinary bunnies vampires(also for fix the bug)
+            if (vampireBunnies.Count > regularBunnies.Count)
             {
-                for (int i = vampireBunnies.Count - 1; i >= regularBunnies.Count; i--)
+                foreach (Bunny regulatBunny in regularBunnies)
                 {
-                    vampireBunnies.RemoveAt(i);
+                    regulatBunny.isRadioactiveMutantVampireBunny = true;
                 }
+
+                return;
             }
 
+            //standart method
             foreach (Bunny vampireBunny in vampireBunnies)
             {
                 List<Bunny> regularCurrentBunneis = GetRegularBunnies(currentBunnies);
