@@ -11,7 +11,7 @@ namespace End
 
         /// <param name="currentBunnies"></param>
         /// <returns>the status of the list (there are only regular bunneis in the list or not)</returns>
-        public static bool StatusVampireApocalype(List<Bunny> currentBunnies)
+        public static bool AreOnlyVampiresleft(List<Bunny> currentBunnies)
         {
             bool isStatus = false;
 

@@ -14,6 +14,10 @@ namespace Bunnies
 
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// sleep 3 seconds to skip a year
+        /// can be stopped
+        /// </summary>
         public static void RunTime()
         {
             const int timeOfSleeping = 3000;//a constant indicating how long the program should wait to skip a year

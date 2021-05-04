@@ -91,7 +91,7 @@ namespace bunnys_hill
             Age = age;
             Name = name;
 
-            DoRadioactiveMutantVampire();
+            AChanceToDoRadioactiveMutantVampire();
         }
         #endregion
 
@@ -142,7 +142,7 @@ namespace bunnys_hill
         /// then its maximum age is 50 years
         /// also every year he bites another regular bunny, and turns him into a vampire
         /// </summary>
-        private void DoRadioactiveMutantVampire()
+        private void AChanceToDoRadioactiveMutantVampire()
         {
             Random random = new Random();
 

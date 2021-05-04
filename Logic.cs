@@ -49,7 +49,7 @@ namespace Bunnies
                     }
                     else
                     {
-                        Print.PrintVampireBunnies(generatedBunny);
+                        Print.PrintVampireBunny(generatedBunny);
                         Print.countNewBunnies++;
                     }
 
@@ -96,7 +96,7 @@ namespace Bunnies
                 }
                 else
                 {
-                    Print.PrintVampireBunnies(generatedBunny);
+                    Print.PrintVampireBunny(generatedBunny);
                     Print.countNewBunnies++;
                 }
 
@@ -185,9 +185,11 @@ namespace Bunnies
             //then there is no point in further loading the system - we make all ordinary bunnies vampires(also for fix the bug)
             if (vampireBunnies.Count > regularBunnies.Count)
             {
-                foreach (Bunny regulatBunny in regularBunnies)
+                foreach (Bunny regularBunny in regularBunnies)
                 {
-                    regulatBunny.isRadioactiveMutantVampireBunny = true;
+                    regularBunny.isRadioactiveMutantVampireBunny = true;
+
+                    Print.PrintVampireBunny(regularBunny);
                 }
 
                 return;
@@ -209,7 +211,7 @@ namespace Bunnies
 
                 regularBunniesEnumerator.Current.isRadioactiveMutantVampireBunny = true;
 
-                Print.PrintVampireBunnies(regularBunniesEnumerator.Current);
+                Print.PrintVampireBunny(regularBunniesEnumerator.Current);
             }
         }
 
