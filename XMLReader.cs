@@ -1,7 +1,7 @@
 ﻿using Bunnies;
 using bunnys_hill;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace XMLWork
@@ -20,7 +20,6 @@ namespace XMLWork
         /// <returns></returns>
         public static List<Bunny> ConvertXmlToList(string path)
         {
-
             try
             {
                 xDoc.Load(path);

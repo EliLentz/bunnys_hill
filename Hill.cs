@@ -1,6 +1,7 @@
-﻿using Bunnies;
+using Bunnies;
 using bunnys_hill;
-using System;
+using End;
+using NLog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,8 +12,10 @@ namespace Hill
     /// </summary>
     class Hill
     {
-        List<Bunny> _hill = new List<Bunny>();// the list of bunnys
+        List<Bunny> _bunnies = new List<Bunny>();// the list of bunnys
         public static int CUR_YEAR { get; private set; } //current year (starts from 0)
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         #region Ctor
         /// <summary>
@@ -21,47 +24,55 @@ namespace Hill
         /// <param name="bunnies">For start circle, constructor needs minimum 2 bunnies(male and female)</param>
         public Hill(List<Bunny> bunnies)
         {
-            foreach (Bunny bunny in bunnies)//add initial bunnies to the loop
-            {
-                _hill.Add(bunny);
-            }
-
-            Logic.PrintNewBunnies(bunnies);
-
+            _bunnies = bunnies;
+            Print.PrintNewBunnies(_bunnies);
+          
             RunCycle();
         }
         #endregion
 
+        #region RunCycle
         /// <summary>
         /// this method starts the life cycle of bunnies
         /// </summary>
         private void RunCycle()
         {
-            while (true)
+            while (!DoEnd.AreOnlyVampiresleft(_bunnies))//As long as there is at least one regular bunny, the program will keep working.
             {
-                Task taskStopper = Logic.Stopper();
+                Task taskStopper = Times.Stopper();
 
                 taskStopper.Start();
 
-                Logic.KillOldBunnies(_hill);
-                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_hill);
-                foreach (Bunny bunny in newBunnies)
+                if (_bunnies.Count > 500)//if the quantity of bunnies is more then 500, they will die by natural causes
                 {
-                    _hill.Add(bunny);
+                    Logic.KillHalf(_bunnies);
                 }
 
-                Logic.AddYearToBunnies(_hill);
+                Logic.KillOldBunnies(_bunnies);
+                Logic.DoBite(_bunnies);
+                List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_bunnies);
 
-                Console.WriteLine("Born: " + Logic.countNewBunnies + "\nDied: " + Logic.countDeadBunnies);
+                //adds new bunnies to list
 
-                Logic.countDeadBunnies = 0;
-                Logic.countNewBunnies = 0;
+                foreach (Bunny bunny in newBunnies)
+                {
+                    _bunnies.Add(bunny);
+                }
 
-                Logic.RunTime();
+                Logic.AddYearToBunnies(_bunnies);
 
-                Console.WriteLine("Year " + CUR_YEAR + " has passed");
+                Print.PrintBunniesChangesOverTheYear(_bunnies);
+
+                Times.RunTime();
+              
+                Print.PrintYearInfo(CUR_YEAR);
                 CUR_YEAR++;
             }
+
+            DoEnd.PrintEnd();
+
         }
+        #endregion
+
     }
 }
