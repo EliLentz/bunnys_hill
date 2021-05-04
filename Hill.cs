@@ -1,4 +1,4 @@
-﻿using Bunnies;
+using Bunnies;
 using bunnys_hill;
 using End;
 using NLog;
@@ -26,7 +26,7 @@ namespace Hill
         {
             _bunnies = bunnies;
             Print.PrintNewBunnies(_bunnies);
-
+          
             RunCycle();
         }
         #endregion
@@ -53,6 +53,7 @@ namespace Hill
                 List<Bunny> newBunnies = Logic.GenerateRandomBunnies(_bunnies);
 
                 //adds new bunnies to list
+
                 foreach (Bunny bunny in newBunnies)
                 {
                     _bunnies.Add(bunny);
@@ -63,7 +64,7 @@ namespace Hill
                 Print.PrintBunniesChangesOverTheYear(_bunnies);
 
                 Times.RunTime();
-
+              
                 Print.PrintYearInfo(CUR_YEAR);
                 CUR_YEAR++;
             }

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bunnies
 {
@@ -137,7 +139,7 @@ namespace Bunnies
                 }
             }
         }
-
+      
         /// <summary>
         /// this function kills half of randomly selected rabbits
         /// </summary>
@@ -238,7 +240,6 @@ namespace Bunnies
 
             return femaleBunnies.ToList();
         }
-
         #endregion
 
         #region Regular And Vampire
